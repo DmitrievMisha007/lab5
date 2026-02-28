@@ -3,6 +3,7 @@ package core;
 import java.util.ArrayDeque;
 
 public class App {
+    static private String fileName;
     static private boolean isRun = true;
     static private Collection collection;
     static private ArrayDeque<String> history;
@@ -15,8 +16,9 @@ public class App {
         isRun = run;
     }
 
-    static public void init(Collection collection){
+    static public void init(Collection collection, String fileName){
         App.collection = collection;
+        App.fileName = fileName;
     }
 
     static public void addToHistory(Object object){
@@ -28,5 +30,13 @@ public class App {
 
     static public ArrayDeque<String> getHistory(){
         return history;
+    }
+
+
+    static public Collection getCollection(){
+        return collection;
+    }
+    static public String getFileName(){
+        return fileName;
     }
 }

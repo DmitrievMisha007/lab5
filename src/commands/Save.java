@@ -1,11 +1,12 @@
 package commands;
 
-import core.Collection;
-import interfases.CommandWithCollection;
 
-public class Save implements CommandWithCollection {
+import core.App;
+import interfases.Command;
+
+public class Save implements Command {
     @Override
-    public void execute(Collection collection){
-//        collection.writeCollection(collection.getCollection());
+    public void execute(){
+        App.getCollection().writeCollection(App.getFileName());
     }
 }

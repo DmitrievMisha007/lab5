@@ -1,16 +1,28 @@
 package core;
 
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Collection {
-    ArrayDeque<Ticket> collection = new ArrayDeque<>();
+    private Date initDate;
+
+    private ArrayDeque<Ticket> collection = new ArrayDeque<>();
+
+    public Collection(){
+        initDate = new Date();
+    }
 
     public ArrayDeque<Ticket> getCollection() {
         return collection;
+    }
+    public Date getInitDate() {
+        return initDate;
     }
 
     public void setCollection(ArrayDeque<Ticket> collection) {
@@ -40,14 +52,12 @@ public class Collection {
 
     public void readCollection(String fileName){
         StringBuilder fileString = new StringBuilder();
-        ArrayDeque<Ticket> collection = new ArrayDeque<>();
-        FileReader reader;
-        try{
-            reader = new FileReader(fileName);
+
+        try (FileReader reader = new FileReader(fileName)){
+
             while (reader.ready()){
                 fileString.append((char) reader.read());
             }
-            reader.close();
         } catch (AccessDeniedException exception){
             System.out.println("Недостаточно прав доступа для чтения коллекции");
         } catch (IOException exception){
@@ -84,6 +94,16 @@ public class Collection {
     }
 
     public void writeCollection(String fileName){
-        System.out.println(Ticket.toJson(collection.getFirst(), 0));
+        StringBuilder toWrite = new StringBuilder();
+        for (var i : collection){
+            toWrite.append(Ticket.toJson(i, 2));
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))){
+            writer.write(String.valueOf(toWrite));
+        } catch (AccessDeniedException exception){
+            System.out.println("Недостаточно прав доступа для чтения коллекции");
+        } catch (IOException exception){
+            System.out.println("Файл не найден");
+        }
     }
 }

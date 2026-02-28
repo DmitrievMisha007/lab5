@@ -5,13 +5,13 @@ import interfases.*;
 
 public class Invoker {
     public Command help;
-    public CommandWithCollection info;
-    public CommandWithCollection show;
-    public CommandWithCollection add;
+    public Command info;
+    public Command show;
+    public Command add;
     public CommandWithCollectionAndLong updateId;
     public CommandWithCollectionAndLong removeById;
-    public CommandWithCollection clear;
-    public CommandWithCollection save;
+    public Command clear;
+    public Command save;
     public CommandWithString executeScript;
     public Command exit;
     public Command addIfMax;
@@ -23,7 +23,7 @@ public class Invoker {
 
     public void init(){
         help = new Help();
-
+        info = new Info();
         show = new Show();
         add = new Add();
         updateId = new UpdateId();

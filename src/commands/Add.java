@@ -1,11 +1,11 @@
 package commands;
 
-import core.Collection;
-import interfases.CommandWithCollection;
+import core.App;
+import interfases.Command;
 
-public class Add implements CommandWithCollection {
+public class Add implements Command {
     @Override
-    public void execute(Collection collection){
-        collection.add();
+    public void execute(){
+        App.getCollection().add();
     }
 }

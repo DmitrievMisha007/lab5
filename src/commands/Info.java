@@ -1,11 +1,14 @@
 package commands;
 
-import core.Collection;
-import interfases.CommandWithCollection;
+import core.App;
+import interfases.Command;
 
-public class Info implements CommandWithCollection {
+public class Info implements Command {
     @Override
-    public void execute(Collection collection){
-        String result = "";
+    public void execute(){
+        String result = "type: "+ App.getCollection().getClass().getName()+"\n"+
+                "init date: "+App.getCollection().getInitDate()+"\n"+
+                "amount of elements: "+App.getCollection().getCollection().size();
+        System.out.println(result);
     }
 }
