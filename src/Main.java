@@ -13,19 +13,16 @@ public class Main{
     }
 
     public static void main(String[] args) throws IOException {
-        if (args.length != 0){
+        if (args.length != 1){
             return;
         }
         Collection collection = new Collection();
         collection.readCollection("data.json");
-        collection.writeCollection("data.json");
         Invoker invoker = new Invoker();
         invoker.init();
 //        invoker.show.execute(collection);
-
-        while (App.isRun()){
-
-        }
-
+        App.init(collection, args[0], invoker);
+        invoker.printFieldAscendingPrice.execute();
+        invoker.printFieldDescendingRefundable.execute();
     }
 }

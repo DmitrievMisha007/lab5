@@ -32,5 +32,10 @@ public class Invoker {
         save = new Save();
 
         exit = new Exit();
+        addIfMax = new AddIfMax();
+        addIfMin = new AddIfMin();
+        history = new History();
+        printFieldAscendingPrice = new PrintFieldAscendingPrice();
+        printFieldDescendingRefundable = new PrintFieldDescendingRefundable();
     }
 }

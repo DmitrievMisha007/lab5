@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Ticket implements WritableToJson {
+public class Ticket implements WritableToJson, Comparable<Ticket>{
     static private long currentId = 1;
     private long id; //+Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
@@ -402,5 +402,11 @@ public class Ticket implements WritableToJson {
         return result;
     }
 
+    @Override
+    public int compareTo(Ticket o) {
+        if (this.price > o.price) return 1;
+        else if (this.price < o.price) return -1;
+        return 0;
+    }
 }
 
