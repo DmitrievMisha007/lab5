@@ -1,0 +1,40 @@
+[
+  {
+    "id": 1,
+    "name": "Aboba1",
+    "coordinates": {
+      "x": 100,
+      "y": 100
+    },
+    "creationDate": "Mon Feb 22 16:36:17 MSK 2026",
+    "price": 100,
+    "comment": "aboba1",
+    "refundable": "true",
+    "type": "USUAL",
+    "event": {
+      "id": 1,
+      "name": "aboba1",
+      "ticketsCount": 10,
+      "eventType": "E_SPORTS"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Aboba2",
+    "coordinates": {
+      "x": 200,
+      "y": 200
+    },
+    "creationDate": "Sun Feb 22 16:36:17 MSK 2026",
+    "price": 200,
+    "comment": "aboba2",
+    "refundable": "true",
+    "type": "USUAL",
+    "event": {
+      "id": 2,
+      "name": "aboba2",
+      "ticketsCount": 20,
+      "eventType": "E_SPORTS"
+    }
+  }
+]
