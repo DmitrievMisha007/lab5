@@ -7,7 +7,7 @@ public class App {
     static private String fileName;
     static private boolean isRun = true;
     static private Collection collection;
-    static private ArrayDeque<String> history;
+    static private ArrayDeque<String> history = new ArrayDeque<>();
     static private Invoker invoker;
 
     static public void setRun(boolean run) {
@@ -41,9 +41,10 @@ public class App {
 
     static public void run(){
         Scanner scanner = new Scanner(System.in);
-        while (isRun && scanner.hasNextLine()){
+        while (isRun){
+            System.out.print("Введите команду: ");
             String line = scanner.nextLine().trim();
-            String[] words = line.split(" ");
+            String[] words = line.split("\\s+");
             if (words.length == 1){
                 switch (words[0]){
                     case "help" -> invoker.help.execute();
@@ -62,8 +63,22 @@ public class App {
 
                     case "print_field_ascending_price" -> invoker.printFieldAscendingPrice.execute();
                     case "print_field_descending_refundable" -> invoker.printFieldDescendingRefundable.execute();
-
+                    default -> System.out.println("Ошибка ввода команды");
                 }
+            } else if (words.length == 2) {
+                if (words[1].matches("[0-9]+")) {
+                    switch (words[0]) {
+                        case "update" -> invoker.updateId.execute(Long.parseLong(words[1]));
+                        case "remove_by_id" -> invoker.removeById.execute(Long.parseLong(words[1]));
+                        default -> System.out.println("Ошибка ввода команды");
+                    }
+                } else if (words[1].matches("[0-9]+\\.[0-9]+")) {
+                    switch (words[0]) {
+                        case "filter_greater_than_price" -> invoker.filterGreaterThanPrice.execute(Double.parseDouble(words[1]));
+                        default -> System.out.println("Ошибка ввода команды");
+                    }
+                }
+
             }
         }
     }

@@ -23,6 +23,7 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
     public Ticket(){
         id = currentId++;
         creationDate = new Date();
+        coordinates = new Coordinates();
     }
 
     public void setId(long ticketId) {
@@ -133,7 +134,7 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
         while (true) {
             System.out.print("Введите X (<= 851): ");
             try {
-                Double x = Double.parseDouble(scanner.nextLine().trim());
+                double x = Double.parseDouble(scanner.nextLine().trim());
                 if (x <= 851) {
                     coordinates.setX(x);
                     break;

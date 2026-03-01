@@ -1,12 +1,12 @@
 package commands;
 
-import core.Collection;
-import interfases.CommandWithCollectionAndLong;
+import core.App;
+import interfases.CommandWithLong;
 
-public class UpdateId implements CommandWithCollectionAndLong {
+public class UpdateId implements CommandWithLong {
     @Override
-    public void execute(Collection collection, long id){
-        for (var i : collection.getCollection()){
+    public void execute( long id){
+        for (var i : App.getCollection().getCollection()){
             if (i.getId() == id){
                 i.resetParameters();
             }

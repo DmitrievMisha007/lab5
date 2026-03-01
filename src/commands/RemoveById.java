@@ -1,11 +1,11 @@
 package commands;
 
-import core.Collection;
-import interfases.CommandWithCollectionAndLong;
+import core.App;
+import interfases.CommandWithLong;
 
-public class RemoveById implements CommandWithCollectionAndLong {
+public class RemoveById implements CommandWithLong {
     @Override
-    public void execute(Collection collection, long id) {
-        collection.removeById(id);
+    public void execute(long id) {
+        App.getCollection().removeById(id);
     }
 }

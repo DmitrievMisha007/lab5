@@ -8,8 +8,8 @@ public class Invoker {
     public Command info;
     public Command show;
     public Command add;
-    public CommandWithCollectionAndLong updateId;
-    public CommandWithCollectionAndLong removeById;
+    public CommandWithLong updateId;
+    public CommandWithLong removeById;
     public Command clear;
     public Command save;
     public CommandWithString executeScript;
@@ -35,6 +35,7 @@ public class Invoker {
         addIfMax = new AddIfMax();
         addIfMin = new AddIfMin();
         history = new History();
+        filterGreaterThanPrice = new FilterGreaterThanPrice();
         printFieldAscendingPrice = new PrintFieldAscendingPrice();
         printFieldDescendingRefundable = new PrintFieldDescendingRefundable();
     }

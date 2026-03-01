@@ -24,5 +24,6 @@ public class Main{
         App.init(collection, args[0], invoker);
         invoker.printFieldAscendingPrice.execute();
         invoker.printFieldDescendingRefundable.execute();
+        App.run();
     }
 }
