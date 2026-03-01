@@ -17,7 +17,7 @@ public class Main{
             return;
         }
         Collection collection = new Collection();
-        collection.readCollection("data.json");
+        collection.readCollection(args[0]);
         Invoker invoker = new Invoker();
         invoker.init();
 //        invoker.show.execute(collection);

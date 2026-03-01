@@ -30,7 +30,7 @@ public class Invoker {
         removeById = new RemoveById();
         clear = new Clear();
         save = new Save();
-
+        executeScript = new ExecuteScript();
         exit = new Exit();
         addIfMax = new AddIfMax();
         addIfMin = new AddIfMin();
