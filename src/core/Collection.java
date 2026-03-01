@@ -8,6 +8,7 @@ import java.nio.file.AccessDeniedException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 
 public class Collection {
     private Date initDate;
@@ -25,13 +26,6 @@ public class Collection {
         return initDate;
     }
 
-    public void setCollection(ArrayDeque<Ticket> collection) {
-        this.collection = collection;
-    }
-
-//    public void add(Ticket ticket){
-//        collection.add(ticket);
-//    }
     public void add(){
         Ticket ticket = new Ticket();
         ticket.resetParameters();
@@ -94,11 +88,16 @@ public class Collection {
     }
 
     public void writeCollection(String fileName){
-        StringBuilder toWrite = new StringBuilder();
-        for (var i : collection){
-            toWrite.append(Ticket.toJson(i, 2));
+        StringBuilder toWrite = new StringBuilder("[");
+        Iterator<Ticket> iterator = collection.iterator();
+        while (iterator.hasNext()) {
+            toWrite.append(Ticket.toJson(iterator.next(), 1));
+            if (iterator.hasNext()) toWrite.append(",\n");
         }
+
+        toWrite.append("]");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))){
+
             writer.write(String.valueOf(toWrite));
         } catch (AccessDeniedException exception){
             System.out.println("Недостаточно прав доступа для чтения коллекции");

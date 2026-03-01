@@ -321,7 +321,10 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
     }
 
     private static boolean getBoolean(String json, String key){
-        String value = getString(json, key);
+        Pattern pattern = Pattern.compile("\""+key+"\": (.*?),");
+        Matcher matcher = pattern.matcher(json);
+        matcher.find();
+        String value = matcher.group(1);
         return Boolean.parseBoolean(value);
     }
 
@@ -356,7 +359,7 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
                     }
                 }
                 case "core.Coordinates", "core.Event" -> {
-                    Pattern jsonPattern = Pattern.compile("\\{.*?\\}", Pattern.DOTALL);
+                    Pattern jsonPattern = Pattern.compile("\\{.*?}", Pattern.DOTALL);
                     Matcher jsonMatcher = jsonPattern.matcher(json);
                     jsonMatcher.find(index);
                     index = jsonMatcher.end();
@@ -372,10 +375,8 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
     public static String toJson(Object object, int deep){
         String result = "";
         if (WritableToJson.class.isAssignableFrom(object.getClass())){
-            result += "{\n\t";
-            for (int i = 0; i < deep; i++) {
-                result += "\t";
-            }
+            result += "{\n";
+
             Field[] fields = object.getClass().getDeclaredFields();
             Iterator<Field> fieldIterator = Arrays.stream(fields).iterator();
             while (fieldIterator.hasNext()){
@@ -385,19 +386,35 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
                     if (Modifier.isStatic(field.getModifiers())) {
                         continue;
                     }
-                    result += field.getName()+": "+toJson(field.get(object), deep + 1);
+                    for (int i = 0; i < deep; i++) {
+                        result += "\t";
+                    }
+                    String toJsStr = toJson(field.get(object), deep + 1);
+                    toJsStr = switch (field.getType().getName()) {
+                        case "java.lang.String", "core.EventType", "core.TicketType", "java.util.Date" -> "\""+toJsStr+"\"";
+                        default -> toJsStr;
+                    };
+
+                    result += "\""+field.getName()+"\": "+toJsStr;
+                    if (fieldIterator.hasNext()) {
+                        result += ",\n";
+//                        for (int i = 0; i < deep; i++) {
+//                            result += "\t";
+//                        }
+                    }
+                    else result += "\n";
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
             }
-            result += "},\n\t";
+            for (int i = 0; i < deep-1; i++) {
+                result += "\t";
+            }
+            result += "}";
 
         }
         else {
-            result += object+",\n";
-            for (int i = 0; i < deep; i++) {
-                result += "\t";
-            }
+            result += object;
         }
 
         return result;
