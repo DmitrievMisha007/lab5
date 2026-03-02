@@ -60,6 +60,10 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
         this.event = event;
     }
 
+    public static void setCurrentId(long currentId) {
+        Ticket.currentId = currentId;
+    }
+
     public static long getCurrentId() {
         return currentId;
     }
@@ -103,16 +107,25 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
 
     @Override
     public String toString(){
-        String result = "id: "+id+"\n"+
-                "name: "+name+"\n"+
-                "coordinates: "+coordinates.toString()+"\n"+
-                "creation date: "+creationDate.toString()+"\n"+
-                "price: "+price+"\n"+
-                "comment: "+comment+"\n"+
-                "refundable: "+refundable+"\n"+
-                "ticket type: "+type.toString()+"\n"+
-                "event: "+event.toString();
-        return result;
+        Field[] fields = this.getClass().getDeclaredFields();
+        StringBuilder result = new StringBuilder();
+        for (Field f : fields){
+            try {
+                if (Modifier.isStatic(f.getModifiers())) {
+                    continue;
+                }
+                Object value = f.get(this);
+                if (value != null){
+                    result.append(f.getName()).append(": ").append(value).append("\n");
+                }
+                else {
+                    result.append(f.getName()).append(": null\n");
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return result.toString();
     }
 
 
@@ -327,10 +340,25 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
         String value = matcher.group(1);
         return Boolean.parseBoolean(value);
     }
+    private static Enum<?> getEnum(String json, Field field) {
+        Pattern pattern1 = Pattern.compile("\""+field.getName()+"\": (.*?)[,\n]");
+        Matcher matcher1 = pattern1.matcher(json);
+        matcher1.find();
+        String value1 = matcher1.group(1).trim();
+        if (value1.equals("null")) {
+            return null;
+        }
+        Pattern pattern2 = Pattern.compile("\"(.*?)\"");
+        Matcher matcher2 = pattern2.matcher(value1);
+        matcher2.find();
+        String value2 = matcher2.group(1).trim();
+        return Enum.valueOf((Class<Enum>) field.getType(), value2);
+    }
 
     public static <T> T fromJson(String json, int index, Class<?> objectType) throws Exception {
         Pattern pattern = Pattern.compile("\"(.*?)\":");
         Matcher matcher = pattern.matcher(json);
+        @SuppressWarnings("unchecked")
         T result = (T) objectType.getDeclaredConstructor().newInstance();
         while (matcher.find(index)) {
             String filedName = matcher.group(1);
@@ -349,7 +377,7 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
                 case "double", "java.lang.Double" -> getDouble(json, filedName);
                 case "long", "java.lang.Long" -> getLong(json, filedName);
                 case "boolean" -> getBoolean(json, filedName);
-                case "core.EventType", "core.TicketType" -> Enum.valueOf((Class<Enum>) fieldType, getString(json, filedName));
+                case "core.EventType", "core.TicketType" -> getEnum(json, field);
                 case "java.util.Date" -> {
                     try{
                         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
@@ -359,10 +387,12 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
                     }
                 }
                 case "core.Coordinates", "core.Event" -> {
-                    Pattern jsonPattern = Pattern.compile("\\{.*?}", Pattern.DOTALL);
+                    Pattern jsonPattern = Pattern.compile("\\{.*?}|null", Pattern.DOTALL);
                     Matcher jsonMatcher = jsonPattern.matcher(json);
                     jsonMatcher.find(index);
                     index = jsonMatcher.end();
+                    String string = jsonMatcher.group(0);
+                    if (Objects.equals(string, "null")) yield null;
                     yield fromJson(jsonMatcher.group(0), 0, fieldType);
                 }
                 default -> throw new IllegalStateException("Unexpected value: " + fieldType.getName());
@@ -386,22 +416,27 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
                     if (Modifier.isStatic(field.getModifiers())) {
                         continue;
                     }
-                    for (int i = 0; i < deep; i++) {
-                        result += "\t";
-                    }
-                    String toJsStr = toJson(field.get(object), deep + 1);
-                    toJsStr = switch (field.getType().getName()) {
-                        case "java.lang.String", "core.EventType", "core.TicketType", "java.util.Date" -> "\""+toJsStr+"\"";
-                        default -> toJsStr;
-                    };
+                    if (field.get(object) == null) {
 
-                    result += "\""+field.getName()+"\": "+toJsStr;
+                        result += "\""+field.getName()+"\": null";
+                    }
+                    else {
+                        for (int i = 0; i < deep; i++) {
+                            result += "\t";
+                        }
+                        String toJsStr = toJson(field.get(object), deep + 1);
+                        toJsStr = switch (field.getType().getName()) {
+                            case "java.lang.String", "core.EventType", "core.TicketType", "java.util.Date" ->
+                                    "\"" + toJsStr + "\"";
+                            default -> toJsStr;
+                        };
+
+                        result += "\"" + field.getName() + "\": " + toJsStr;
+                    }
                     if (fieldIterator.hasNext()) {
                         result += ",\n";
-//                        for (int i = 0; i < deep; i++) {
-//                            result += "\t";
-//                        }
                     }
+
                     else result += "\n";
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);

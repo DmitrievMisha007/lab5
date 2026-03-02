@@ -2,6 +2,9 @@ package core;
 
 import interfases.WritableToJson;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
 public class Event implements WritableToJson {
     static private Long currentId = new Long(1);
     private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
@@ -31,9 +34,25 @@ public class Event implements WritableToJson {
 
     @Override
     public String toString(){
-        return "\n\tid: "+id+"\n\t"+
-                "name: "+name+"\n\t"+
-                "ticketCount: "+ticketsCount+"\n\t"+
-                "EventType: "+eventType.toString();
+
+        Field[] fields = this.getClass().getDeclaredFields();
+        StringBuilder result = new StringBuilder();
+        for (Field f : fields){
+            try {
+                if (Modifier.isStatic(f.getModifiers())) {
+                    continue;
+                }
+                Object value = f.get(this);
+                if (value != null){
+                    result.append(f.getName()).append(": ").append(value).append("\n");
+                }
+                else {
+                    result.append(f.getName()).append(": null\n");
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return result.toString();
     }
 }

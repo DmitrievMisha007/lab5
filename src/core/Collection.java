@@ -84,6 +84,7 @@ public class Collection {
                 throw new RuntimeException(e);
             }
             this.collection.add(ticket);
+            if (Ticket.getCurrentId() <= ticket.getId()) Ticket.setCurrentId(ticket.getId()+1);
         }
     }
 

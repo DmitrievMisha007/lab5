@@ -15,7 +15,7 @@ public class Coordinates implements WritableToJson {
 
     @Override
     public String toString(){
-        return "x: "+x+"\ty: "+y;
+        return "x: "+x+"\t|\ty: "+y;
     }
 
     public void setX(Double x) {
