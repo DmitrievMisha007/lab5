@@ -80,11 +80,12 @@ public class Collection {
             Ticket ticket;
             try {
                 ticket = Ticket.fromJson(i, 0, Ticket.class);
+                this.collection.add(ticket);
+                if (Ticket.getCurrentId() <= ticket.getId()) Ticket.setCurrentId(ticket.getId()+1);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                System.out.println("Файл поврежден");
             }
-            this.collection.add(ticket);
-            if (Ticket.getCurrentId() <= ticket.getId()) Ticket.setCurrentId(ticket.getId()+1);
+
         }
     }
 
