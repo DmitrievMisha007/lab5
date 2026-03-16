@@ -128,6 +128,12 @@ public class App {
                     addToHistory("execute_script");
                     invoker.executeScript.execute(words[1]);
                 }
+                else {
+                    System.out.println("Ошибка ввода команды");
+                }
+            }
+            else {
+                System.out.println("Ошибка ввода команды");
             }
         }
     }
