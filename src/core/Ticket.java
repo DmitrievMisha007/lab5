@@ -309,7 +309,7 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
         while (json.charAt(start) == ' ') start++;
 
         int end = start;
-        while (end < json.length() && "0123456789.".indexOf(json.charAt(end)) != -1){
+        while (end < json.length() && "0123456789.+-eE".indexOf(json.charAt(end)) != -1){
             end++;
         }
 

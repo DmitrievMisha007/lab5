@@ -14,9 +14,10 @@ public class Main{
             return;
         }
         Collection collection = new Collection();
+        collection.readCollection("data.json");
         Invoker invoker = new Invoker();
         invoker.init();
-        App.init(collection, "", invoker);
+        App.init(collection, "data.json", invoker);
         App.run();
     }
 }
