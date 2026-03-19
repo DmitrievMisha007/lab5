@@ -134,7 +134,7 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
 
         // ===== name =====
         while (true) {
-            System.out.print("Введите имя: ");
+            System.out.print("Введите имя(не может быть пустым): ");
             String input = scanner.nextLine();
             if (input != null && !input.trim().isEmpty()) {
                 setName(input.trim());
@@ -285,18 +285,12 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
 
 
     private static String getString(String json, String key){
-        String pattern = "\"" + key + "\":";
-        int start = json.indexOf(pattern);
-        if (start == -1) return null;
-
-        start += pattern.length();
-
-        while (json.charAt(start) == ' ' || json.charAt(start) == '\"') start++;
-
-        int end = start;
-        while (json.charAt(end) != '\"') end++;
-
-        return json.substring(start, end);
+        Pattern pattern = Pattern.compile("\""+key+ "\":\\s*\"(.*)\",*");
+        Matcher matcher = pattern.matcher(json);
+        matcher.find();
+        String result = matcher.group(1);
+        if (Objects.equals(result, "")) return null;
+        return result;
     }
 
     private static double getDouble(String json, String key){
