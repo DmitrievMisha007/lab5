@@ -122,7 +122,7 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
 
         // X
         while (true) {
-            System.out.print("Введите X (<= 851): ");
+            System.out.print("Введите X <= 851, в качестве десятичного разделителя используется точка: ");
             try {
                 double x = Double.parseDouble(scanner.nextLine().trim());
                 if (x <= 851) {
@@ -138,7 +138,7 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
 
         // Y
         while (true) {
-            System.out.print("Введите Y (<= 621): ");
+            System.out.print("Введите Y <= 621, в качестве десятичного разделителя используется точка: ");
             try {
                 double y = Double.parseDouble(scanner.nextLine().trim());
                 if (y <= 621) {
@@ -156,7 +156,7 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
 
         // ===== price =====
         while (true) {
-            System.out.print("Введите цену (> 0): ");
+            System.out.print("Введите цену > 0, в качестве десятичного разделителя используется точка: ");
             try {
                 double price = Double.parseDouble(scanner.nextLine().trim());
                 if (price > 0) {
@@ -172,7 +172,7 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
 
         // ===== comment =====
         while (true) {
-            System.out.print("Введите комментарий: ");
+            System.out.print("Введите комментарий, поле не может быть пустым: ");
             String input = scanner.nextLine();
             if (input != null && !input.trim().isEmpty()) {
                 setComment(input.trim());
@@ -209,7 +209,7 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
         }
 
         // ===== event (nullable) =====
-        System.out.print("Создать событие? (yes/no): ");
+        System.out.print("Создать событие? (yes/no) или пусто: ");
         String answer = scanner.nextLine().trim().toLowerCase();
 
         if (answer.equals("yes")) {
@@ -217,7 +217,7 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
 
             // name
             while (true) {
-                System.out.print("Имя события: ");
+                System.out.print("Имя события (поле не может быть пустым): ");
                 String input = scanner.nextLine();
                 if (input != null && !input.trim().isEmpty()) {
                     event.setName(input.trim());
@@ -228,7 +228,7 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
 
             // ticketsCount
             while (true) {
-                System.out.print("Количество билетов (> 0): ");
+                System.out.print("Введите количество билетов (целое число > 0): ");
                 try {
                     long count = Long.parseLong(scanner.nextLine().trim());
                     if (count > 0) {
@@ -237,7 +237,7 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
                     }
                     System.out.println("Ошибка: должно быть > 0.");
                 } catch (Exception e) {
-                    System.out.println("Ошибка: введите число.");
+                    System.out.println("Ошибка: введите целое число.");
                 }
             }
 
