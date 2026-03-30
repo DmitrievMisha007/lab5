@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.Stack;
 
 /**
  * Команда, которая вызывает команды из файла.
@@ -19,8 +20,15 @@ public class ExecuteScript implements CommandWithString {
      */
     @Override
     public void execute(String fileName) {
+
         try (FileReader reader = new FileReader(fileName)) {
             Scanner scanner = new Scanner(reader);
+            for (String i : App.getStack()){
+                if (i.equals(fileName)){
+                    return;
+                }
+            }
+            App.getStack().add(fileName);
 
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -57,6 +65,7 @@ public class ExecuteScript implements CommandWithString {
                     }
                 }
             }
+            App.getStack().pop();
         } catch (AccessDeniedException exception){
             System.out.println("Недостаточно прав доступа для чтения коллекции");
         } catch (IOException exception){

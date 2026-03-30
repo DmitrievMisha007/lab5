@@ -3,6 +3,7 @@ package core;
 import java.util.ArrayDeque;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.Stack;
 
 /**
  * Абстрактный класс для управления приложением
@@ -13,6 +14,7 @@ abstract public class App {
     static private Collection collection;
     static private ArrayDeque<String> history;
     static private Invoker invoker;
+    static private Stack<String> stack;
 
     static public void setRun(boolean run) {
         isRun = run;
@@ -29,6 +31,7 @@ abstract public class App {
         App.fileName = fileName;
         App.invoker = invoker;
         App.history  = new ArrayDeque<>();
+        App.stack = new Stack<>();
     }
 
     static private void addToHistory(String commandName){
@@ -37,6 +40,10 @@ abstract public class App {
 
     static public ArrayDeque<String> getHistory(){
         return history;
+    }
+
+    static public Stack<String> getStack(){
+        return stack;
     }
 
 
