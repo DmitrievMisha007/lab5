@@ -9,32 +9,29 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Класс, описывающий сущность билет.
+ */
 public class Ticket implements WritableToJson, Comparable<Ticket>{
     static private long currentId = 1;
-    private long id; //+Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
-    private String name; //Поле не может быть null, Строка не может быть пустой
-    private Coordinates coordinates; //Поле не может быть null
-    private Date creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
-    private double price; //Значение поля должно быть больше 0
-    private String comment; //Поле не может быть null
+    private long id;
+    private String name;
+    private Coordinates coordinates;
+    private Date creationDate;
+    private double price;
+    private String comment;
     private boolean refundable;
-    private TicketType type; //Поле может быть null
-    private Event event; //Поле может быть null
+    private TicketType type;
+    private Event event;
     public Ticket(){
         id = currentId++;
         creationDate = new Date();
         coordinates = new Coordinates();
     }
 
-    public void setId(long ticketId) {
-        this.id = ticketId;
-    }
-
     public void setName(String name){
         this.name = name;
     }
-
-    public void setCreationDate(Date date) {this.creationDate = date;}
 
     public void setCoordinates(Coordinates coordinates){
         this.coordinates = coordinates;
@@ -72,37 +69,14 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Coordinates getCoordinates() {
-        return coordinates;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
     public double getPrice() {
         return price;
-    }
-
-    public String getComment() {
-        return comment;
     }
 
     public boolean isRefundable() {   // для boolean используется is
         return refundable;
     }
 
-    public TicketType getType() {
-        return type;
-    }
-
-    public Event getEvent() {
-        return event;
-    }
 
 
     @Override
@@ -129,6 +103,9 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
     }
 
 
+    /**
+     * Заново задает значение билета
+     */
     public void resetParameters(){
         Scanner scanner = new Scanner(System.in);
 
@@ -349,6 +326,14 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
         return Enum.valueOf((Class<Enum>) field.getType(), value2);
     }
 
+    /**
+     * Рекурсивно считывает данные из файла формата json и создает из них объект класса заданного типа
+     * @param json файл json, представленный в строковом виде
+     * @param index индекс, с которого требуется начать парсинг значений объекта
+     * @param objectType тип класса для парсинга
+     * @return Объект класса заданного типа
+     * @throws Exception
+     */
     public static <T> T fromJson(String json, int index, Class<?> objectType) throws Exception {
         Pattern pattern = Pattern.compile("\"(.*?)\":");
         Matcher matcher = pattern.matcher(json);
@@ -396,6 +381,12 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
         return result;
     }
 
+    /**
+     * Рекурсивно создает из данного объекта строку, пригодную для записи в файл формата json
+     * @param object Объект для записи
+     * @param deep Глубина вложенности объекта в файле json
+     * @return Строка для записи в json
+     */
     public static String toJson(Object object, int deep){
         String result = "";
         if (WritableToJson.class.isAssignableFrom(object.getClass())){
@@ -449,6 +440,11 @@ public class Ticket implements WritableToJson, Comparable<Ticket>{
         return result;
     }
 
+    /**
+     * Сравнивает элементы по цене
+     * @param o элемент для сравнения
+     * @return 1 если данный элемент меньше, -1 если больше, 0 если элементы равны
+     */
     @Override
     public int compareTo(Ticket o) {
         if (this.price > o.price) return 1;

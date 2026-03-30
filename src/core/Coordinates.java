@@ -2,13 +2,12 @@ package core;
 
 import interfases.WritableToJson;
 
+/**
+ * Класс, описывающий координаты для класса Ticket.
+ */
 public class Coordinates implements WritableToJson {
-    private Double x; //Максимальное значение поля: 851, Поле не может быть null
-    private double y; //Максимальное значение поля: 621
-    Coordinates(Double x, double y){
-        this.x = x;
-        this.y = y;
-    }
+    private Double x;
+    private double y;
     public Coordinates(){
 
     }
@@ -24,13 +23,5 @@ public class Coordinates implements WritableToJson {
 
     public void setY(double y) {
         this.y = y;
-    }
-
-    public Double getX(){
-        return x;
-    }
-
-    public double getY(){
-        return y;
     }
 }

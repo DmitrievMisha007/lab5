@@ -9,7 +9,14 @@ import java.nio.file.AccessDeniedException;
 import java.util.Objects;
 import java.util.Scanner;
 
+/**
+ * Команда, которая вызывает команды из файла.
+ */
 public class ExecuteScript implements CommandWithString {
+    /**
+     * Вызывает команду
+     * @param fileName Имя файла
+     */
     @Override
     public void execute(String fileName) {
         try (FileReader reader = new FileReader(fileName)) {

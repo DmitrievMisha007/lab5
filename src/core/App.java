@@ -4,7 +4,10 @@ import java.util.ArrayDeque;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class App {
+/**
+ * Абстрактный класс для управления приложением
+ */
+abstract public class App {
     static private String fileName;
     static private boolean isRun = true;
     static private Collection collection;
@@ -15,6 +18,12 @@ public class App {
         isRun = run;
     }
 
+    /**
+     * Инициализирует приложение
+     * @param collection Коллекция
+     * @param fileName Имя файла, с которым будет производиться работа
+     * @param invoker Объект класса, вызывающего команды
+     */
     static public void init(Collection collection, String fileName, Invoker invoker){
         App.collection = collection;
         App.fileName = fileName;
@@ -22,7 +31,7 @@ public class App {
         App.history  = new ArrayDeque<>();
     }
 
-    static public void addToHistory(String commandName){
+    static private void addToHistory(String commandName){
         history.add(commandName);
     }
 
@@ -41,6 +50,9 @@ public class App {
         return invoker;
     }
 
+    /**
+     * Запускает основной цикл программы
+     */
     static public void run(){
         Scanner scanner = new Scanner(System.in);
         while (isRun){

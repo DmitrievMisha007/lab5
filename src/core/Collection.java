@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+/**
+ * Класс, описывающий коллекцию для хранения элементов класса Ticket
+ */
 public class Collection {
     private Date initDate;
 
@@ -26,12 +29,20 @@ public class Collection {
         return initDate;
     }
 
+    /**
+     * Добавить элемент в коллекцию
+     */
     public void add(){
         Ticket ticket = new Ticket();
         ticket.resetParameters();
         collection.add(ticket);
         System.out.println("Элемент успешно добавлен!");
     }
+
+    /**
+     * Удалить элемент из коллекции по id
+     * @param id Номер элемента, предназначенного для удаления
+     */
     public void removeById(long id){
         for (var i : collection){
             if (i.getId() == id){
@@ -40,10 +51,18 @@ public class Collection {
             }
         }
     }
+
+    /**
+     * Очистить коллекцию
+     */
     public void clear(){
         collection.clear();
     }
 
+    /**
+     * Заполняет коллекцию элементами из файла
+     * @param fileName Имя файла
+     */
     public void readCollection(String fileName){
         StringBuilder fileString = new StringBuilder();
 
@@ -89,6 +108,10 @@ public class Collection {
         }
     }
 
+    /**
+     * Записывает все элементы коллекции в файл
+     * @param fileName Имя файла
+     */
     public void writeCollection(String fileName){
         StringBuilder toWrite = new StringBuilder("[");
         Iterator<Ticket> iterator = collection.iterator();

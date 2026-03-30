@@ -3,6 +3,9 @@ package core;
 import commands.*;
 import interfases.*;
 
+/**
+ * Класс, который служит для вызова команд.
+ */
 public class Invoker {
     public Command help;
     public Command info;
@@ -21,6 +24,9 @@ public class Invoker {
     public Command printFieldAscendingPrice;
     public Command printFieldDescendingRefundable;
 
+    /**
+     * Метод инициализации класса
+     */
     public void init(){
         help = new Help();
         info = new Info();

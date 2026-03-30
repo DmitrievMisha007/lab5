@@ -2,7 +2,13 @@ package commands;
 
 import interfases.Command;
 
+/**
+ * Команда выводит список всех команд.
+ */
 public class Help implements Command {
+    /**
+     * Запускает команду.
+     */
     @Override
     public void execute(){
         String info = "help : вывести справку по доступным командам\n" +

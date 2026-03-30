@@ -5,12 +5,15 @@ import interfases.WritableToJson;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+/**
+ * Класс, описывающий событие для класса Ticket.
+ */
 public class Event implements WritableToJson {
     static private Long currentId = new Long(1);
-    private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
-    private String name; //Поле не может быть null, Строка не может быть пустой
-    private long ticketsCount; //Значение поля должно быть больше 0
-    private EventType eventType; //Поле не может быть null
+    private Long id;
+    private String name;
+    private long ticketsCount;
+    private EventType eventType;
     public Event(){
         id = currentId;
         currentId += 1;
@@ -26,10 +29,6 @@ public class Event implements WritableToJson {
 
     public void setEventType(EventType eventType) {
         this.eventType = eventType;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     @Override
