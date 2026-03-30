@@ -16,7 +16,7 @@ public class Main{
         Collection collection = new Collection();
         Invoker invoker = new Invoker();
         invoker.init();
-        App.init(collection, "", invoker);
+        App.init(collection, "data.json", invoker);
         App.run();
     }
 }
