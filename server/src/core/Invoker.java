@@ -12,7 +12,6 @@ public class Invoker {
     public Command removeById;
     public Command clear;
     public Command save;
-    public Command executeScript;
     public Command exit;
     public Command addIfMax;
     public Command addIfMin;
@@ -33,7 +32,6 @@ public class Invoker {
         removeById = new RemoveById();
         clear = new Clear();
         save = new Save();
-        executeScript = new ExecuteScript();
         exit = new Exit();
         addIfMax = new AddIfMax();
         addIfMin = new AddIfMin();

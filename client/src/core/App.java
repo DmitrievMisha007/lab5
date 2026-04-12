@@ -4,8 +4,11 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.nio.file.AccessDeniedException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class App {
     private final String host;
@@ -18,6 +21,10 @@ public class App {
     private ByteBuffer lengthBuffer = ByteBuffer.allocate(4);
     private ByteBuffer dataBuffer = null;
     private int expectedLength = -1;
+
+    // execute_script вспомогательные поля
+    private final Stack<String> scriptStack = new Stack<>();
+    private BufferedReader console;
 
     public App(String host, int port){
         this.host = host;
@@ -32,8 +39,21 @@ public class App {
 
         System.out.print("Введите команду: ");
         try (BufferedReader console = new BufferedReader(new InputStreamReader(System.in))) {
+            this.console = console;
             String line;
             while ((line = console.readLine()) != null) {
+
+                // В методе start() внутри while ((line = console.readLine()) != null)
+                if (line.trim().startsWith("execute_script")) {
+                    String[] parts = line.trim().split("\\s+");
+                    if (parts.length == 2) {
+                        executeScript(parts[1]);
+                    } else {
+                        System.out.println("Использование: execute_script <имя_файла>");
+                    }
+                    System.out.print("Введите команду: ");
+                    continue;
+                }
 
                 if (line.trim().equalsIgnoreCase("exit")) break;
                 if (line.trim().isEmpty()) {
@@ -419,6 +439,83 @@ public class App {
             result.put("event", null);
         }
         return result;
+    }
+
+
+    /**
+     * Выполняет скрипт из указанного файла.
+     * При обнаружении команд add/add_if_max/add_if_min/update запрашивает параметры у пользователя.
+     */
+    private void executeScript(String fileName) {
+        // Проверка рекурсии
+        if (scriptStack.contains(fileName)) {
+            System.out.println("Обнаружена рекурсия! Выполнение скрипта " + fileName + " пропущено.");
+            return;
+        }
+        scriptStack.push(fileName);
+        Path path = Paths.get(fileName);
+        try {
+            List<String> lines = Files.readAllLines(path);
+            for (String line : lines) {
+                line = line.trim();
+                if (line.isEmpty() || line.startsWith("#")) continue;
+
+                String[] tokens = line.split("\\s+");
+                String command = tokens[0];
+                Map<String, Object> args = null;
+
+                // Определяем, нужно ли интерактивное заполнение
+                boolean needsInteractive = Set.of("add", "add_if_max", "add_if_min", "update").contains(command);
+
+                if (needsInteractive) {
+                    args = new LinkedHashMap<>();
+                    // Для update: сначала извлекаем id, если он указан в строке
+                    if (command.equals("update") && tokens.length >= 2) {
+                        try {
+                            long id = Long.parseLong(tokens[1]);
+                            args.put("arg1", String.valueOf(id));
+                        } catch (NumberFormatException e) {
+                            System.out.println("Некорректный id в скрипте для update, будет запрошен интерактивно.");
+                        }
+                    }
+                    // Запрашиваем параметры через консоль (используем существующий BufferedReader)
+                    // ВАЖНО: нужно передать тот же BufferedReader, что используется в start()
+                    // Для этого сделаем его полем класса или передадим параметром.
+                    // Упростим: сделаем console полем класса.
+                    Map<String, Object> interactiveArgs = getAddParameters(console);
+                    args.putAll(interactiveArgs);
+                } else {
+                    if (tokens.length > 1) {
+                        args = new LinkedHashMap<>();
+                        for (int i = 1; i < tokens.length; i++) {
+                            args.put("arg" + i, tokens[i]);
+                        }
+                    }
+                    // Особый случай: execute_script внутри скрипта (рекурсивный вызов)
+                    if (command.equals("execute_script") && tokens.length >= 2) {
+                        executeScript(tokens[1]);
+                        continue;
+                    }
+                }
+
+                CommandRequest request = new CommandRequest(command, args);
+                try {
+                    CommandResponse response = sendAndReceive(request);
+                    if (response != null) {
+                        System.out.println(response.getString());
+                    }
+                } catch (IOException | InterruptedException e) {
+                    System.err.println("Ошибка при выполнении команды " + command + ": " + e.getMessage());
+                    reconnect();
+                }
+            }
+        } catch (AccessDeniedException e) {
+            System.out.println("Недостаточно прав для чтения файла " + fileName);
+        } catch (IOException e) {
+            System.out.println("Ошибка чтения файла " + fileName + ": " + e.getMessage());
+        } finally {
+            scriptStack.pop();
+        }
     }
 
 

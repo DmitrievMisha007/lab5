@@ -17,13 +17,11 @@ public class Manager {
     private String fileName;
 
     private ArrayDeque<String> history;
-    private Stack<String> stack;
 
     public Manager(String fileName){
         this.fileName = fileName;
         initDate = new Date();
         history = new ArrayDeque<>();
-        stack = new Stack<>();
     }
 
     public ArrayDeque<String> getHistory() { return history; }
@@ -41,9 +39,6 @@ public class Manager {
 
     public String getFileName() {
         return fileName;
-    }
-    public Stack<String> getStack(){
-        return stack;
     }
 
     /**

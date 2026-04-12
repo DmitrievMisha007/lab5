@@ -7,7 +7,6 @@ public class CommandFactory {
             case "add_if_max" -> invoker.addIfMax.execute(manager, request.getArgs()); // +
             case "add_if_min" -> invoker.addIfMin.execute(manager, request.getArgs()); // +
             case "clear" -> invoker.clear.execute(manager, request.getArgs()); // +
-            case "execute_script" -> invoker.executeScript.execute(manager, request.getArgs());
             case "filter_greater_than_price" -> invoker.filterGreaterThanPrice.execute(manager, request.getArgs()); // +
             case "help" -> invoker.help.execute(manager, request.getArgs()); // +
             case "history" -> invoker.history.execute(manager, request.getArgs()); // +
