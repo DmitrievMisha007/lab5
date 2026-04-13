@@ -18,6 +18,7 @@ public class CommandFactory {
             case "update" -> invoker.updateId.execute(manager, request.getArgs()); // +
             default -> new CommandResponse("Команда не распознана");
         };
+        manager.updateHistory(request.getName());
         return response;
     }
 }
