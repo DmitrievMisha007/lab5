@@ -14,7 +14,6 @@ public class CommandFactory {
             case "print_field_ascending_price" -> invoker.printFieldAscendingPrice.execute(manager, request.getArgs()); // +
             case "print_field_descending_refundable" -> invoker.printFieldDescendingRefundable.execute(manager, request.getArgs()); // +
             case "remove_by_id" -> invoker.removeById.execute(manager, request.getArgs()); // +
-            case "save" -> invoker.save.execute(manager, request.getArgs()); // +
             case "show" -> invoker.show.execute(manager, request.getArgs()); // +
             case "update" -> invoker.updateId.execute(manager, request.getArgs()); // +
             default -> new CommandResponse("Команда не распознана");

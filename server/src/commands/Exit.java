@@ -1,5 +1,6 @@
 package commands;
 
+import core.App;
 import core.Manager;
 import core.CommandResponse;
 import interfases.Command;
@@ -13,10 +14,15 @@ public class Exit implements Command {
     /**
      * Вызывает команду
      *
-     * @return
+     * @return Ответ коиенту
      */
     @Override
     public CommandResponse execute(Manager manager, Map<String, Object> args){
-        return null;
+        // Сохраняем коллекцию перед выходом
+        manager.writeCollection();
+        // Останавливаем сервер
+        App.stop();
+        // Возвращаем сообщение (клиент может его получить до завершения)
+        return new CommandResponse("Сервер завершает работу. Коллекция сохранена.");
     }
 }

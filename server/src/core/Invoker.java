@@ -11,7 +11,6 @@ public class Invoker {
     public Command updateId;
     public Command removeById;
     public Command clear;
-    public Command save;
     public Command exit;
     public Command addIfMax;
     public Command addIfMin;
@@ -31,7 +30,6 @@ public class Invoker {
         updateId = new UpdateId();
         removeById = new RemoveById();
         clear = new Clear();
-        save = new Save();
         exit = new Exit();
         addIfMax = new AddIfMax();
         addIfMin = new AddIfMin();

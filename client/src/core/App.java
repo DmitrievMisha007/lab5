@@ -17,12 +17,12 @@ public class App {
 
     private boolean connected = false;
 
-    // Состояние для чтения ответа (аналог ClientState на сервере)
+
     private ByteBuffer lengthBuffer = ByteBuffer.allocate(4);
     private ByteBuffer dataBuffer = null;
     private int expectedLength = -1;
 
-    // execute_script вспомогательные поля
+
     private final Stack<String> scriptStack = new Stack<>();
     private BufferedReader console;
 
@@ -43,7 +43,6 @@ public class App {
             String line;
             while ((line = console.readLine()) != null) {
 
-                // В методе start() внутри while ((line = console.readLine()) != null)
                 if (line.trim().startsWith("execute_script")) {
                     String[] parts = line.trim().split("\\s+");
                     if (parts.length == 2) {
@@ -478,10 +477,6 @@ public class App {
                             System.out.println("Некорректный id в скрипте для update, будет запрошен интерактивно.");
                         }
                     }
-                    // Запрашиваем параметры через консоль (используем существующий BufferedReader)
-                    // ВАЖНО: нужно передать тот же BufferedReader, что используется в start()
-                    // Для этого сделаем его полем класса или передадим параметром.
-                    // Упростим: сделаем console полем класса.
                     Map<String, Object> interactiveArgs = getAddParameters(console);
                     args.putAll(interactiveArgs);
                 } else {
@@ -491,7 +486,6 @@ public class App {
                             args.put("arg" + i, tokens[i]);
                         }
                     }
-                    // Особый случай: execute_script внутри скрипта (рекурсивный вызов)
                     if (command.equals("execute_script") && tokens.length >= 2) {
                         executeScript(tokens[1]);
                         continue;
